@@ -593,10 +593,9 @@ class MetalOmikujiApp {
     document.getElementById('fortune-quote').textContent =
       `「${char.quotes[fortune.quoteIdx || 0]}」`;
 
-    // 泣きの1回ボタン
-    const usedRetry = fortune.usedRetry || false;
-    document.getElementById('nakino-btn').style.display  = usedRetry ? 'none' : '';
-    document.getElementById('nakino-used').style.display = usedRetry ? '' : 'none';
+    // 泣きの1回ボタン（テスト中: 常に表示）
+    document.getElementById('nakino-btn').style.display  = '';
+    document.getElementById('nakino-used').style.display = 'none';
   }
 
   _starsStr(n)      { return '★'.repeat(n) + '☆'.repeat(5 - n); }
@@ -776,8 +775,8 @@ class MetalOmikujiApp {
 
     // 泣きの1回
     document.getElementById('nakino-btn').addEventListener('click', () => {
-      if (confirm('今日の運勢が気に入らない…\n泣きの1回を使いますか？\n（本日これが最後です）')) {
-        this.state.dailyFortune = this._drawFortune(true);
+      if (confirm('もう一回引く？（テスト中: 何回でも可）')) {
+        this.state.dailyFortune = this._drawFortune(false);
         this._addToCollection(this.state.dailyFortune.charId);
         this._saveState();
         this._updateMainUI();
