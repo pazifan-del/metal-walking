@@ -564,43 +564,87 @@ html, body {
 /* ── HEALTH SYNC BUTTON ── */
 #health-sync-wrap {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 8px;
   margin: 6px 0 2px;
 }
 
-#health-sync-btn {
+#health-sync-btn, #auto-sync-info-btn {
   font-family: 'Press Start 2P', monospace;
   font-size: 6px;
   background: none;
-  color: #666;
   border: 1px solid #333;
-  padding: 6px 12px;
+  padding: 6px 10px;
   cursor: pointer;
 }
+#health-sync-btn { color: #666; }
+#auto-sync-info-btn { color: #448; border-color: #224; }
 #health-sync-btn:active { color: var(--gold); border-color: var(--gold); }
+#auto-sync-info-btn:active { color: #88f; border-color: #88f; }
 
-#gfit-area { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-
-#gfit-status {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 5px;
-  color: #4a8;
-  min-height: 8px;
+/* AUTO SYNC MODAL */
+#auto-sync-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 20px 16px;
 }
-
-#gfit-sync-btn {
+#auto-sync-modal.show { display: flex; align-items: flex-start; justify-content: center; }
+.auto-sync-inner {
+  width: 100%;
+  max-width: 360px;
+  color: #ccc;
   font-family: 'Press Start 2P', monospace;
+}
+.auto-sync-title {
+  font-size: 9px;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 12px;
+}
+.auto-sync-section {
+  font-size: 7px;
+  color: var(--gold);
+  margin: 14px 0 8px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 4px;
+}
+.auto-sync-desc {
+  font-size: 6px;
+  line-height: 1.8;
+  color: #888;
+  margin-bottom: 8px;
+}
+.auto-sync-steps {
+  font-size: 6px;
+  line-height: 2.2;
+  color: #aaa;
+  padding-left: 16px;
+  margin: 0;
+}
+.step-note {
   font-size: 5px;
+  color: #666;
+}
+.step-url {
+  font-size: 5px;
+  color: #48f;
+  word-break: break-all;
+}
+#auto-sync-close {
+  display: block;
+  margin: 20px auto 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
   background: none;
-  color: #444;
-  border: 1px solid #222;
-  padding: 4px 8px;
+  color: #666;
+  border: 1px solid #444;
+  padding: 8px 20px;
   cursor: pointer;
 }
-#gfit-sync-btn:active { color: #4a8; border-color: #4a8; }
-#gfit-sync-btn.linked { color: #4a8; border-color: #4a8; }
 
 /* iOS permission modal */
 #ios-modal {

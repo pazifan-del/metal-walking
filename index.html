@@ -44,13 +44,10 @@
       <div id="char-title-display">雷神の右腕</div>
     </div>
 
-    <!-- Health / Google Fit sync -->
+    <!-- Health sync -->
     <div id="health-sync-wrap">
       <button id="health-sync-btn">📲 歩数を入力</button>
-      <div id="gfit-area">
-        <div id="gfit-status"></div>
-        <button id="gfit-sync-btn">G でもっと便利に使う</button>
-      </div>
+      <button id="auto-sync-info-btn">⚙ 自動同期の設定</button>
     </div>
 
     <!-- Milestone progress bar -->
@@ -143,7 +140,32 @@
   <button class="dbg-btn danger" id="dbg-reset">RESET</button>
 </div>
 
-<script src="https://accounts.google.com/gsi/client" async></script>
-<script src="js/app.js?v=8"></script>
+<!-- ══ AUTO SYNC GUIDE MODAL ══ -->
+<div id="auto-sync-modal">
+  <div class="auto-sync-inner">
+    <div class="auto-sync-title">⚡ 自動同期の設定 ⚡</div>
+    <div class="auto-sync-desc">ヘルスケアの歩数を自動で取り込む方法です</div>
+
+    <div class="auto-sync-section">📱 iPhone の場合</div>
+    <ol class="auto-sync-steps">
+      <li>「ショートカット」アプリを開く</li>
+      <li>右上の「＋」→「アクションを追加」</li>
+      <li>「ヘルスケアのサンプルを取得」を追加<br><span class="step-note">種類: 歩数 ／ 期間: 今日</span></li>
+      <li>さらに「URLを開く」を追加<br>
+        <span class="step-url">https://pazifan-del.github.io/metal-walking/?steps=</span><br>
+        <span class="step-note">URLの後ろに「サンプルの合計」変数を追加</span>
+      </li>
+      <li>ショートカット名を「Metal Walking」にして保存</li>
+      <li>ホーム画面に追加 → 毎回このアイコンから開く</li>
+    </ol>
+
+    <div class="auto-sync-section">🤖 Android の場合</div>
+    <div class="auto-sync-desc">現在は「歩数を入力」ボタンで手動入力をご利用ください。</div>
+
+    <button id="auto-sync-close">✕ 閉じる</button>
+  </div>
+</div>
+
+<script src="js/app.js?v=9"></script>
 </body>
 </html>

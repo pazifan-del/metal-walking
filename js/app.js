@@ -1,8 +1,5 @@
 'use strict';
 
-// Google Fit連携: Google Cloud ConsoleでクライアントIDを取得後ここに貼る
-const GOOGLE_CLIENT_ID = '965554977154-veesvf1b4mp77knuh6f8j5g6fg9eb5sm.apps.googleusercontent.com';
-
 // ═══════════════════════════════════════════════════════
 //  CHARACTER DATA
 // ═══════════════════════════════════════════════════════
@@ -514,98 +511,6 @@ class MetalWalkingApp {
     this._render();
     this._startDetector();
     this._syncFromURL();
-    this._updateGfitUI();
-    // Google Fit連携済みなら起動時に自動同期
-    if (localStorage.getItem('gfit_linked')) {
-      setTimeout(() => this._syncGoogleFit(true), 1500);
-    }
-  }
-
-  // Google Fit連携
-  _updateGfitUI() {
-    const linked = !!localStorage.getItem('gfit_linked');
-    const btn = document.getElementById('gfit-sync-btn');
-    const status = document.getElementById('gfit-status');
-    if (linked) {
-      btn.textContent = '✅ Google Fit連携中';
-      btn.classList.add('linked');
-      status.textContent = '起動時に自動で歩数を取得します';
-    } else {
-      btn.textContent = 'G でもっと便利に使う';
-      btn.classList.remove('linked');
-      status.textContent = '';
-    }
-  }
-
-  async _syncGoogleFit(silent = false) {
-    if (!GOOGLE_CLIENT_ID) return;
-    const btn = document.getElementById('gfit-sync-btn');
-    if (!silent) {
-      btn.textContent = '⏳ 取得中...';
-      btn.disabled = true;
-    }
-    try {
-      const token = await this._getGoogleToken(silent);
-      const steps = await this._fetchFitSteps(token);
-      localStorage.setItem('gfit_linked', '1');
-      if (steps > this.state.todaySteps) {
-        this.addSteps(steps - this.state.todaySteps);
-        if (!silent) this.audio.powerChord();
-      }
-    } catch (e) {
-      if (!silent) {
-        document.getElementById('gfit-status').textContent = '❌ ログインをキャンセルしました';
-        setTimeout(() => this._updateGfitUI(), 2000);
-      }
-      console.error(e);
-    } finally {
-      btn.disabled = false;
-      this._updateGfitUI();
-    }
-  }
-
-  _getGoogleToken(silent = false) {
-    return new Promise((resolve, reject) => {
-      if (typeof google === 'undefined') {
-        reject(new Error('Google Identity Services が読み込まれていません'));
-        return;
-      }
-      const client = google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
-        scope: 'https://www.googleapis.com/auth/fitness.activity.read',
-        callback: (resp) => {
-          if (resp.error) reject(new Error(resp.error));
-          else resolve(resp.access_token);
-        },
-      });
-      client.requestAccessToken({ prompt: silent ? '' : 'consent' });
-    });
-  }
-
-  async _fetchFitSteps(token) {
-    const startOfDay = new Date();
-    startOfDay.setHours(0, 0, 0, 0);
-    const res = await fetch(
-      'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
-      {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          aggregateBy: [{ dataTypeName: 'com.google.step_count.delta' }],
-          bucketByTime: { durationMillis: 86400000 },
-          startTimeMillis: startOfDay.getTime(),
-          endTimeMillis: Date.now(),
-        }),
-      }
-    );
-    const data = await res.json();
-    let total = 0;
-    for (const bucket of data.bucket || [])
-      for (const ds of bucket.dataset || [])
-        for (const pt of ds.point || [])
-          for (const v of pt.value || [])
-            total += v.intVal || 0;
-    return total;
   }
 
   // ヘルスケア連携: URL ?steps=N で今日の歩数を同期
@@ -1044,8 +949,11 @@ class MetalWalkingApp {
       }
     });
 
-    document.getElementById('gfit-sync-btn').addEventListener('click', () => {
-      this._syncGoogleFit();
+    document.getElementById('auto-sync-info-btn').addEventListener('click', () => {
+      document.getElementById('auto-sync-modal').classList.add('show');
+    });
+    document.getElementById('auto-sync-close').addEventListener('click', () => {
+      document.getElementById('auto-sync-modal').classList.remove('show');
     });
 
     document.getElementById('step-counter-block').addEventListener('click', () => {

@@ -1,4 +1,4 @@
-const CACHE = 'metal-walking-v8';
+const CACHE = 'metal-walking-v9';
 const ASSETS = [
   './',
   './index.html',
