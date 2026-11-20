@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#0a0a0a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Metal Walking">
-  <title>Metal Walking 鋼鉄の歩行伝説</title>
+  <meta name="apple-mobile-web-app-title" content="Metal Omikuji">
+  <title>⚡ METAL OMIKUJI ⚡</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -16,11 +16,8 @@
 
   <!-- ══ HEADER ══ -->
   <div id="header">
-    <div id="app-title">⚡ METAL WALKING ⚡</div>
-    <div id="header-steps">
-      <div id="header-today">今日: 0 歩</div>
-      <div id="header-total">累計: 0 歩</div>
-    </div>
+    <div id="app-title">⚡ METAL OMIKUJI ⚡</div>
+    <div id="header-sub">1日1回 鋼鉄のおみくじ</div>
   </div>
 
   <!-- ══ MAIN SCREEN ══ -->
@@ -70,17 +67,10 @@
       <div id="fortune-quote"></div>
     </div>
 
-    <!-- 歩数表示（サブ / 3回タップでデバッグ） -->
-    <div id="step-counter-block">
-      <span id="step-number">0</span>
-      <span id="step-label">STEPS</span>
-    </div>
-
-    <!-- アクションボタン -->
-    <div id="health-sync-wrap">
-      <button id="health-sync-btn">📲 歩数を入力</button>
-      <button id="auto-sync-info-btn">⚙ 同期設定</button>
-      <button id="reset-btn">🗑 RESET</button>
+    <!-- 泣きの1回 -->
+    <div id="nakino-wrap">
+      <button id="nakino-btn">😭 泣きの1回</button>
+      <div id="nakino-used">今日の再引きは使いました</div>
     </div>
 
   </main>
@@ -112,12 +102,6 @@
 
 </div><!-- #app -->
 
-<!-- ══ QUOTE POPUP ══ -->
-<div id="quote-popup">
-  <div id="quote-char-name"></div>
-  <div id="quote-text"></div>
-</div>
-
 <!-- ══ STORY EVENT OVERLAY ══ -->
 <div id="event-overlay">
   <div id="event-title"></div>
@@ -140,55 +124,13 @@
   <button id="modal-close">✕ 閉じる</button>
 </div>
 
-<!-- ══ iOS PERMISSION MODAL ══ -->
-<div id="ios-modal">
-  <div id="ios-modal-title">⚡ 加速度センサーを許可 ⚡</div>
-  <div id="ios-modal-desc">
-    このアプリは歩数を検出するために<br>
-    デバイスの動きセンサーを使用します。<br>
-    「許可する」を押して歩き始めよう！
-  </div>
-  <button id="ios-allow-btn">許可する</button>
-  <button id="ios-skip-btn" style="font-family:inherit;font-size:7px;background:none;color:#666;border:1px solid #333;padding:6px 12px;cursor:pointer;margin-top:4px">スキップ（歩数検出なし）</button>
-</div>
-
 <!-- ══ DEBUG PANEL ══ -->
 <div id="debug-panel">
   <div style="font-size:6px;color:#0f0;margin-bottom:4px">▶ DEBUG</div>
-  <button class="dbg-btn" id="dbg-100">+100歩</button>
-  <button class="dbg-btn" id="dbg-1000">+1000歩</button>
-  <button class="dbg-btn" id="dbg-5000">+5000歩</button>
-  <button class="dbg-btn" id="dbg-10000">+10000歩</button>
   <button class="dbg-btn" id="dbg-redraw">おみくじ再抽選</button>
   <button class="dbg-btn danger" id="dbg-reset">RESET</button>
 </div>
 
-<!-- ══ AUTO SYNC GUIDE MODAL ══ -->
-<div id="auto-sync-modal">
-  <div class="auto-sync-inner">
-    <div class="auto-sync-title">⚡ 自動同期の設定 ⚡</div>
-    <div class="auto-sync-desc">ヘルスケアの歩数を自動で取り込む方法です</div>
-
-    <div class="auto-sync-section">📱 iPhone の場合</div>
-    <ol class="auto-sync-steps">
-      <li>「ショートカット」アプリを開く</li>
-      <li>右上の「＋」→「アクションを追加」</li>
-      <li>「ヘルスケアのサンプルを取得」を追加<br><span class="step-note">種類: 歩数 ／ 期間: 今日</span></li>
-      <li>さらに「URLを開く」を追加<br>
-        <span class="step-url">https://pazifan-del.github.io/metal-walking/?steps=</span><br>
-        <span class="step-note">URLの後ろに「サンプルの合計」変数を追加</span>
-      </li>
-      <li>ショートカット名を「Metal Walking」にして保存</li>
-      <li>ホーム画面に追加 → 毎回このアイコンから開く</li>
-    </ol>
-
-    <div class="auto-sync-section">🤖 Android の場合</div>
-    <div class="auto-sync-desc">現在は「歩数を入力」ボタンで手動入力をご利用ください。</div>
-
-    <button id="auto-sync-close">✕ 閉じる</button>
-  </div>
-</div>
-
-<script src="js/app.js?v=10"></script>
+<script src="js/app.js?v=11"></script>
 </body>
 </html>

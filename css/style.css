@@ -68,20 +68,10 @@ html, body {
   letter-spacing: 1px;
 }
 
-#header-steps {
-  text-align: right;
-}
-
-#header-today {
-  font-size: 7px;
-  color: var(--gold);
-  text-shadow: 0 0 6px var(--gold);
-}
-
-#header-total {
+#header-sub {
   font-size: 6px;
   color: var(--silver);
-  margin-top: 2px;
+  letter-spacing: 1px;
 }
 
 /* ── SCREENS ── */
@@ -246,30 +236,38 @@ html, body {
   -webkit-box-orient: vertical;
 }
 
-/* ── STEP COUNTER (secondary) ── */
-#step-counter-block {
+/* ── 泣きの1回 ── */
+#nakino-wrap {
   width: 100%;
-  background: var(--bg);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 4px 0 2px;
-  cursor: pointer;
+  padding: 6px 8px 8px;
   flex-shrink: 0;
+  gap: 4px;
 }
 
-#step-number {
-  font-size: clamp(14px, 5vw, 22px);
-  color: var(--gold);
-  text-shadow: 0 0 10px rgba(241,196,15,0.4);
-  line-height: 1;
+#nakino-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  background: none;
+  border: 2px solid #c0392b;
+  color: #e74c3c;
+  padding: 8px 16px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.2s, color 0.2s;
 }
 
-#step-label {
+#nakino-btn:active {
+  background: #c0392b;
+  color: #fff;
+}
+
+#nakino-used {
   font-size: 6px;
   color: #555;
-  letter-spacing: 1px;
+  display: none;
 }
 
 /* ── RARITY COLORS ── */
@@ -600,8 +598,8 @@ html, body {
 }
 
 .history-date    { font-size: 7px; color: var(--silver); }
-.history-steps   { font-size: 8px; color: #666; margin-top: 2px; }
 .history-char    { font-size: 6px; color: var(--text); margin-top: 2px; }
+.history-retry   { font-size: 5px; color: #c0392b; margin-top: 2px; }
 .history-fortune { font-size: 10px; }
 .history-rarity  { font-size: 5px; color: #666; margin-top: 1px; }
 
