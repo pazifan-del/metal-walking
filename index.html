@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Metal Walking">
+  <title>Metal Walking 鋼鉄の歩行伝説</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ══ HEADER ══ -->
+  <div id="header">
+    <div id="app-title">⚡ METAL WALKING ⚡</div>
+    <div id="header-steps">
+      <div id="header-today">今日: 0 歩</div>
+      <div id="header-total">累計: 0 歩</div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN SCREEN ══ -->
+  <main id="screen-main" class="screen active">
+
+    <!-- Big step counter (tap 5× to open debug) -->
+    <div id="step-counter-block">
+      <div id="step-number">0</div>
+      <div id="step-label">TODAY'S STEPS</div>
+    </div>
+
+    <!-- Character image -->
+    <div id="char-wrap">
+      <div id="fire-overlay"></div>
+      <img id="char-img" src="" alt="character" data-char-id="">
+    </div>
+
+    <!-- Character name bar -->
+    <div id="char-info">
+      <div id="char-name-display">タカサキ・サンダー</div>
+      <div id="char-title-display">雷神の右腕</div>
+    </div>
+
+    <!-- Milestone progress bar -->
+    <div id="milestone-section">
+      <div id="milestone-label">
+        <span id="milestone-next">NEXT: ...</span>
+        <span id="milestone-pct">0%</span>
+      </div>
+      <div id="milestone-bar">
+        <div id="milestone-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ══ ZUKAN SCREEN ══ -->
+  <section id="screen-zukan" class="screen">
+    <div class="zukan-header">📖 METAL ZUKAN — 鋼鉄の図鑑</div>
+    <div id="zukan-grid"></div>
+  </section>
+
+  <!-- ══ HISTORY SCREEN ══ -->
+  <section id="screen-history" class="screen">
+    <div class="history-header">📊 WALK HISTORY — 歩行履歴</div>
+    <div id="history-list"></div>
+  </section>
+
+  <!-- ══ BOTTOM NAV ══ -->
+  <nav id="bottom-nav">
+    <button class="nav-btn active" data-screen="main">
+      <span class="nav-icon">🎸</span>WALK
+    </button>
+    <button class="nav-btn" data-screen="zukan">
+      <span class="nav-icon">📖</span>図鑑
+    </button>
+    <button class="nav-btn" data-screen="history">
+      <span class="nav-icon">📊</span>履歴
+    </button>
+  </nav>
+
+</div><!-- #app -->
+
+<!-- ══ QUOTE POPUP ══ -->
+<div id="quote-popup">
+  <div id="quote-char-name"></div>
+  <div id="quote-text"></div>
+</div>
+
+<!-- ══ STORY EVENT OVERLAY ══ -->
+<div id="event-overlay">
+  <div id="event-title"></div>
+  <img id="event-char-preview" src="" alt="" style="display:none">
+  <div id="event-desc"></div>
+  <button id="event-close-btn">— 閉じる —</button>
+</div>
+
+<!-- ══ CHARACTER DETAIL MODAL ══ -->
+<div id="char-modal">
+  <div id="modal-img-wrap">
+    <img id="modal-stand-img" class="modal-img selected" src="" alt="stand">
+    <img id="modal-action-img" class="modal-img" src="" alt="action">
+  </div>
+  <div id="modal-name"></div>
+  <div id="modal-title"></div>
+  <div id="modal-amp"></div>
+  <div id="modal-quote"></div>
+  <div id="modal-unlock"></div>
+  <button id="modal-close">✕ 閉じる</button>
+</div>
+
+<!-- ══ iOS PERMISSION MODAL ══ -->
+<div id="ios-modal">
+  <div id="ios-modal-title">⚡ 加速度センサーを許可 ⚡</div>
+  <div id="ios-modal-desc">
+    このアプリは歩数を検出するために<br>
+    デバイスの動きセンサーを使用します。<br>
+    「許可する」を押して歩き始めよう！
+  </div>
+  <button id="ios-allow-btn">許可する</button>
+  <button id="ios-skip-btn" style="font-family:inherit;font-size:7px;background:none;color:#666;border:1px solid #333;padding:6px 12px;cursor:pointer;margin-top:4px">スキップ（歩数検出なし）</button>
+</div>
+
+<!-- ══ DEBUG PANEL ══ -->
+<div id="debug-panel">
+  <div style="font-size:6px;color:#0f0;margin-bottom:4px">▶ DEBUG</div>
+  <button class="dbg-btn" id="dbg-100">+100歩</button>
+  <button class="dbg-btn" id="dbg-1000">+1000歩</button>
+  <button class="dbg-btn" id="dbg-5000">+5000歩</button>
+  <button class="dbg-btn" id="dbg-10000">+10000歩</button>
+  <button class="dbg-btn danger" id="dbg-reset">RESET</button>
+</div>
+
+<script src="js/app.js?v=3"></script>
+</body>
+</html>
