@@ -1,10 +1,12 @@
-const CACHE = 'metal-walking-v11';
+const CACHE = 'metal-walking-v12';
 const ASSETS = [
   './',
   './index.html',
   './css/style.css',
   './js/app.js',
   './manifest.json',
+  './assets/icon-192.png',
+  './assets/icon-512.png',
   './assets/images/takasaki_action.jfif',
   './assets/images/zakk_stand.jfif',
   './assets/images/zakk_action.jfif',

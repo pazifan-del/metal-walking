@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Icon Generator</title></head>
+<body style="background:#111;color:#fff;font-family:monospace;padding:20px">
+<canvas id="c" width="512" height="512" style="border:2px solid #c0392b;display:block;margin:10px 0"></canvas>
+<button id="dl" style="font-size:14px;padding:8px 16px;background:#c0392b;color:#fff;border:none;cursor:pointer">Download icon-512.png</button>
+<div id="log" style="font-size:12px;margin-top:8px;color:#0f0"></div>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const log = document.getElementById('log');
+
+function drawSmallFlame(ctx, x, facingRight) {
+  // Small flame icon beside the face
+  ctx.save();
+  ctx.shadowColor = '#e74c3c';
+  ctx.shadowBlur = 10;
+
+  const dir = facingRight ? 1 : -1;
+  const flames = [
+    { ox: 0,         tipY: -55, h: 55, color: '#c0392b' },
+    { ox: dir * 10,  tipY: -48, h: 48, color: '#e74c3c' },
+    { ox: dir * -8,  tipY: -38, h: 38, color: '#f39c12' },
+  ];
+
+  flames.forEach(f => {
+    const grad = ctx.createLinearGradient(x + f.ox, 480 + f.tipY, x + f.ox, 480);
+    grad.addColorStop(0, f.color.replace('rgb', 'rgba').replace(')', ',0)'));
+    grad.addColorStop(0.4, f.color.replace('rgb', 'rgba').replace(')', ',0.8)'));
+    grad.addColorStop(1, f.color.replace('rgb', 'rgba').replace(')', ',1)'));
+
+    ctx.fillStyle = f.color;
+    ctx.globalAlpha = 0.9;
+    ctx.beginPath();
+    ctx.moveTo(x + f.ox, 480 + f.tipY);
+    ctx.bezierCurveTo(
+      x + f.ox - dir * 12, 480 + f.tipY + f.h * 0.5,
+      x + f.ox - dir * 15, 480,
+      x - dir * 20, 512
+    );
+    ctx.lineTo(x + dir * 20, 512);
+    ctx.bezierCurveTo(
+      x + f.ox + dir * 15, 480,
+      x + f.ox + dir * 12, 480 + f.tipY + f.h * 0.5,
+      x + f.ox, 480 + f.tipY
+    );
+    ctx.closePath();
+    ctx.fill();
+  });
+  ctx.restore();
+}
+
+function drawSmallBolt(ctx, x, y, size) {
+  ctx.save();
+  ctx.shadowColor = '#f1c40f';
+  ctx.shadowBlur = 14;
+
+  const s = size;
+  // Bolt shape centered at x, y
+  const pts = [
+    [x + s*0.15, y - s*0.5],   // top right
+    [x - s*0.1,  y + s*0.05],  // mid left
+    [x + s*0.08, y + s*0.05],  // mid right
+    [x - s*0.15, y + s*0.5],   // bottom left
+    [x + s*0.18, y - s*0.0],   // bottom right
+    [x + s*0.05, y - s*0.0],   // mid
+    [x + s*0.22, y - s*0.5],   // top right back
+  ];
+
+  const grad = ctx.createLinearGradient(x, y - s*0.5, x, y + s*0.5);
+  grad.addColorStop(0, '#ffffaa');
+  grad.addColorStop(0.4, '#f1c40f');
+  grad.addColorStop(1, '#e67e22');
+  ctx.fillStyle = grad;
+
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+// Load and render
+const img = new Image();
+img.crossOrigin = 'anonymous';
+img.src = '/assets/images/mika_stand.jfif';
+img.onload = () => {
+  log.textContent = `Image: ${img.naturalWidth}x${img.naturalHeight}`;
+
+  // 1. Dark background
+  ctx.fillStyle = '#080808';
+  ctx.fillRect(0, 0, 512, 512);
+
+  // 2. Crop tightly around ミカミカ's face/upper body
+  // Original: 2752x1536. Character centered around x≈1350, face at y≈50-650
+  // Tight face crop: 600px wide square centered at x=1350
+  const srcX = 1070, srcY = 20, srcW = 600, srcH = 700;
+  ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, 512, 512);
+
+  // 3. Bottom fade (merge into dark background)
+  const fade = ctx.createLinearGradient(0, 350, 0, 512);
+  fade.addColorStop(0, 'rgba(8,8,8,0)');
+  fade.addColorStop(0.6, 'rgba(8,8,8,0.4)');
+  fade.addColorStop(1, 'rgba(8,8,8,0.9)');
+  ctx.fillStyle = fade;
+  ctx.fillRect(0, 0, 512, 512);
+
+  // 4. Left side flame (bottom-left)
+  ctx.save();
+  ctx.shadowColor = '#e74c3c';
+  ctx.shadowBlur = 15;
+  // Flame tongues left side
+  [[55, 440, 85, '#c0392b'], [80, 400, 90, '#e74c3c'], [40, 420, 75, '#f39c12']].forEach(([x, ty, bw, col]) => {
+    const g = ctx.createLinearGradient(x, ty, x, 512);
+    g.addColorStop(0, col + '00');
+    g.addColorStop(0.3, col + 'cc');
+    g.addColorStop(1, col + 'ff');
+    ctx.fillStyle = g;
+    ctx.globalAlpha = 0.9;
+    ctx.beginPath();
+    ctx.moveTo(x, ty);
+    ctx.bezierCurveTo(x - 15, ty + 50, x - bw/2, 480, x - bw/2, 512);
+    ctx.lineTo(x + bw/2, 512);
+    ctx.bezierCurveTo(x + bw/2, 480, x + 15, ty + 50, x, ty);
+    ctx.closePath();
+    ctx.fill();
+  });
+  ctx.restore();
+
+  // 5. Right side flame (bottom-right)
+  ctx.save();
+  ctx.shadowColor = '#e74c3c';
+  ctx.shadowBlur = 15;
+  [[457, 435, 85, '#c0392b'], [432, 395, 90, '#e74c3c'], [472, 415, 75, '#f39c12']].forEach(([x, ty, bw, col]) => {
+    const g = ctx.createLinearGradient(x, ty, x, 512);
+    g.addColorStop(0, col + '00');
+    g.addColorStop(0.3, col + 'cc');
+    g.addColorStop(1, col + 'ff');
+    ctx.fillStyle = g;
+    ctx.globalAlpha = 0.9;
+    ctx.beginPath();
+    ctx.moveTo(x, ty);
+    ctx.bezierCurveTo(x - 15, ty + 50, x - bw/2, 480, x - bw/2, 512);
+    ctx.lineTo(x + bw/2, 512);
+    ctx.bezierCurveTo(x + bw/2, 480, x + 15, ty + 50, x, ty);
+    ctx.closePath();
+    ctx.fill();
+  });
+  ctx.restore();
+
+  // 6. Small lightning bolts — beside face (top corners)
+  drawSmallBolt(ctx, 60, 80, 90);    // left
+  drawSmallBolt(ctx, 452, 80, 90);   // right
+
+  // 7. Red border glow
+  ctx.save();
+  ctx.strokeStyle = '#c0392b';
+  ctx.lineWidth = 6;
+  ctx.shadowColor = '#c0392b';
+  ctx.shadowBlur = 20;
+  ctx.globalAlpha = 0.7;
+  ctx.strokeRect(3, 3, 506, 506);
+  ctx.restore();
+
+  // 8. "METAL" text at bottom
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.font = '900 58px "Arial Black", Impact, monospace';
+  ctx.shadowColor = '#000';
+  ctx.shadowBlur = 10;
+  ctx.fillStyle = '#c0392b';
+  ctx.fillText('METAL', 256, 500);
+  ctx.shadowColor = '#e74c3c';
+  ctx.shadowBlur = 16;
+  ctx.fillStyle = '#c0392b';
+  ctx.fillText('METAL', 256, 500);
+  ctx.restore();
+
+  log.textContent += '  ✓ Done!';
+};
+img.onerror = e => { log.textContent = 'ERROR: ' + e.type; };
+
+document.getElementById('dl').onclick = () => {
+  const a = document.createElement('a');
+  a.download = 'icon-512.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+};
+</script>
+</body>
+</html>
