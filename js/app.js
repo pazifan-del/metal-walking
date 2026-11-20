@@ -478,12 +478,19 @@ class MetalOmikujiApp {
       { label: '末吉', weight: 15 },
       { label: '凶',   weight: 10 },
     ];
-    const totalLW = LEVELS.reduce((s, l) => s + l.weight, 0);
-    let lr = Math.random() * totalLW;
-    let level = LEVELS[LEVELS.length - 1];
-    for (const l of LEVELS) {
-      lr -= l.weight;
-      if (lr <= 0) { level = l; break; }
+    // ミカミカ・オズ・レミー・ジミは固定大吉
+    const DAIKICHI_CHARS = ['mika', 'oz', 'lemmy', 'jimi'];
+    let level;
+    if (DAIKICHI_CHARS.includes(char.id)) {
+      level = LEVELS[0]; // 大吉
+    } else {
+      const totalLW = LEVELS.reduce((s, l) => s + l.weight, 0);
+      let lr = Math.random() * totalLW;
+      level = LEVELS[LEVELS.length - 1];
+      for (const l of LEVELS) {
+        lr -= l.weight;
+        if (lr <= 0) { level = l; break; }
+      }
     }
 
     return {
