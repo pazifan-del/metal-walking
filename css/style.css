@@ -564,26 +564,43 @@ html, body {
 /* ── HEALTH SYNC BUTTON ── */
 #health-sync-wrap {
   display: flex;
-  justify-content: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   margin: 6px 0 2px;
 }
 
-#health-sync-btn, #gfit-sync-btn {
+#health-sync-btn {
   font-family: 'Press Start 2P', monospace;
   font-size: 6px;
   background: none;
   color: #666;
   border: 1px solid #333;
-  padding: 6px 10px;
+  padding: 6px 12px;
   cursor: pointer;
-  letter-spacing: 0.5px;
+}
+#health-sync-btn:active { color: var(--gold); border-color: var(--gold); }
+
+#gfit-area { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+
+#gfit-status {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5px;
+  color: #4a8;
+  min-height: 8px;
 }
 
-#gfit-sync-btn { color: #4a8; border-color: #264; }
-
-#health-sync-btn:active { color: var(--gold); border-color: var(--gold); }
-#gfit-sync-btn:active { color: #0f0; border-color: #0f0; }
+#gfit-sync-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 5px;
+  background: none;
+  color: #444;
+  border: 1px solid #222;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+#gfit-sync-btn:active { color: #4a8; border-color: #4a8; }
+#gfit-sync-btn.linked { color: #4a8; border-color: #4a8; }
 
 /* iOS permission modal */
 #ios-modal {

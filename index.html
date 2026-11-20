@@ -46,8 +46,11 @@
 
     <!-- Health / Google Fit sync -->
     <div id="health-sync-wrap">
-      <button id="health-sync-btn">📲 手動で歩数入力</button>
-      <button id="gfit-sync-btn">🔄 Google Fitと同期</button>
+      <button id="health-sync-btn">📲 歩数を入力</button>
+      <div id="gfit-area">
+        <div id="gfit-status"></div>
+        <button id="gfit-sync-btn">G でもっと便利に使う</button>
+      </div>
     </div>
 
     <!-- Milestone progress bar -->
@@ -141,6 +144,6 @@
 </div>
 
 <script src="https://accounts.google.com/gsi/client" async></script>
-<script src="js/app.js?v=7"></script>
+<script src="js/app.js?v=8"></script>
 </body>
 </html>

@@ -514,37 +514,57 @@ class MetalWalkingApp {
     this._render();
     this._startDetector();
     this._syncFromURL();
+    this._updateGfitUI();
+    // Google Fit連携済みなら起動時に自動同期
+    if (localStorage.getItem('gfit_linked')) {
+      setTimeout(() => this._syncGoogleFit(true), 1500);
+    }
   }
 
   // Google Fit連携
-  async _syncGoogleFit() {
-    if (!GOOGLE_CLIENT_ID) {
-      alert('Google Fit連携はまだ設定中です。しばらくお待ちください。');
-      return;
-    }
+  _updateGfitUI() {
+    const linked = !!localStorage.getItem('gfit_linked');
     const btn = document.getElementById('gfit-sync-btn');
-    btn.textContent = '⏳ 取得中...';
-    btn.disabled = true;
-    try {
-      const token = await this._getGoogleToken();
-      const steps = await this._fetchFitSteps(token);
-      if (steps > this.state.todaySteps) {
-        this.addSteps(steps - this.state.todaySteps);
-        this.audio.powerChord();
-      }
-      btn.textContent = `✅ ${steps.toLocaleString()}歩 同期済`;
-    } catch (e) {
-      btn.textContent = '❌ エラー';
-      console.error(e);
-    } finally {
-      setTimeout(() => {
-        btn.textContent = '🔄 Google Fitと同期';
-        btn.disabled = false;
-      }, 3000);
+    const status = document.getElementById('gfit-status');
+    if (linked) {
+      btn.textContent = '✅ Google Fit連携中';
+      btn.classList.add('linked');
+      status.textContent = '起動時に自動で歩数を取得します';
+    } else {
+      btn.textContent = 'G でもっと便利に使う';
+      btn.classList.remove('linked');
+      status.textContent = '';
     }
   }
 
-  _getGoogleToken() {
+  async _syncGoogleFit(silent = false) {
+    if (!GOOGLE_CLIENT_ID) return;
+    const btn = document.getElementById('gfit-sync-btn');
+    if (!silent) {
+      btn.textContent = '⏳ 取得中...';
+      btn.disabled = true;
+    }
+    try {
+      const token = await this._getGoogleToken(silent);
+      const steps = await this._fetchFitSteps(token);
+      localStorage.setItem('gfit_linked', '1');
+      if (steps > this.state.todaySteps) {
+        this.addSteps(steps - this.state.todaySteps);
+        if (!silent) this.audio.powerChord();
+      }
+    } catch (e) {
+      if (!silent) {
+        document.getElementById('gfit-status').textContent = '❌ ログインをキャンセルしました';
+        setTimeout(() => this._updateGfitUI(), 2000);
+      }
+      console.error(e);
+    } finally {
+      btn.disabled = false;
+      this._updateGfitUI();
+    }
+  }
+
+  _getGoogleToken(silent = false) {
     return new Promise((resolve, reject) => {
       if (typeof google === 'undefined') {
         reject(new Error('Google Identity Services が読み込まれていません'));
@@ -558,7 +578,7 @@ class MetalWalkingApp {
           else resolve(resp.access_token);
         },
       });
-      client.requestAccessToken({ prompt: 'consent' });
+      client.requestAccessToken({ prompt: silent ? '' : 'consent' });
     });
   }
 
