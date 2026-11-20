@@ -510,6 +510,20 @@ class MetalWalkingApp {
     this._bindUI();
     this._render();
     this._startDetector();
+    this._syncFromURL();
+  }
+
+  // ヘルスケア連携: URL ?steps=N で今日の歩数を同期
+  _syncFromURL() {
+    const params = new URLSearchParams(location.search);
+    const healthSteps = parseInt(params.get('steps'), 10);
+    if (!healthSteps || isNaN(healthSteps) || healthSteps <= 0) return;
+    if (healthSteps > this.state.todaySteps) {
+      const diff = healthSteps - this.state.todaySteps;
+      this.addSteps(diff);
+    }
+    // URLパラメータを履歴から消す（リロード時に再適用しない）
+    history.replaceState(null, '', location.pathname);
   }
 
   // ── State ───────────────────────────────────────────
@@ -670,7 +684,7 @@ class MetalWalkingApp {
       const range = nextMilestone - prevMilestone;
       const progress = this.state.todaySteps - prevMilestone;
       pct = Math.min(100, Math.round((progress / range) * 100));
-      labelText = nextChar ? `NEXT: ${nextChar.name} @ ${nextMilestone.toLocaleString()}歩` : `NEXT @ ${nextMilestone.toLocaleString()}歩`;
+      labelText = `NEXT @ ${nextMilestone.toLocaleString()}歩`;
     } else {
       pct = 100;
       labelText = '今日のラインナップ制覇！';
@@ -928,7 +942,7 @@ class MetalWalkingApp {
     document.getElementById('step-counter-block').addEventListener('click', () => {
       this.debugTapCount++;
       clearTimeout(this.debugTapTimer);
-      if (this.debugTapCount >= 5) {
+      if (this.debugTapCount >= 3) {
         this.debugTapCount = 0;
         document.getElementById('debug-panel').classList.toggle('show');
       } else {
