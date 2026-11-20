@@ -1,5 +1,8 @@
 'use strict';
 
+// Google Fit連携: Google Cloud ConsoleでクライアントIDを取得後ここに貼る
+const GOOGLE_CLIENT_ID = '';
+
 // ═══════════════════════════════════════════════════════
 //  CHARACTER DATA
 // ═══════════════════════════════════════════════════════
@@ -513,6 +516,78 @@ class MetalWalkingApp {
     this._syncFromURL();
   }
 
+  // Google Fit連携
+  async _syncGoogleFit() {
+    if (!GOOGLE_CLIENT_ID) {
+      alert('Google Fit連携はまだ設定中です。しばらくお待ちください。');
+      return;
+    }
+    const btn = document.getElementById('gfit-sync-btn');
+    btn.textContent = '⏳ 取得中...';
+    btn.disabled = true;
+    try {
+      const token = await this._getGoogleToken();
+      const steps = await this._fetchFitSteps(token);
+      if (steps > this.state.todaySteps) {
+        this.addSteps(steps - this.state.todaySteps);
+        this.audio.powerChord();
+      }
+      btn.textContent = `✅ ${steps.toLocaleString()}歩 同期済`;
+    } catch (e) {
+      btn.textContent = '❌ エラー';
+      console.error(e);
+    } finally {
+      setTimeout(() => {
+        btn.textContent = '🔄 Google Fitと同期';
+        btn.disabled = false;
+      }, 3000);
+    }
+  }
+
+  _getGoogleToken() {
+    return new Promise((resolve, reject) => {
+      if (typeof google === 'undefined') {
+        reject(new Error('Google Identity Services が読み込まれていません'));
+        return;
+      }
+      const client = google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'https://www.googleapis.com/auth/fitness.activity.read',
+        callback: (resp) => {
+          if (resp.error) reject(new Error(resp.error));
+          else resolve(resp.access_token);
+        },
+      });
+      client.requestAccessToken({ prompt: 'consent' });
+    });
+  }
+
+  async _fetchFitSteps(token) {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const res = await fetch(
+      'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
+      {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          aggregateBy: [{ dataTypeName: 'com.google.step_count.delta' }],
+          bucketByTime: { durationMillis: 86400000 },
+          startTimeMillis: startOfDay.getTime(),
+          endTimeMillis: Date.now(),
+        }),
+      }
+    );
+    const data = await res.json();
+    let total = 0;
+    for (const bucket of data.bucket || [])
+      for (const ds of bucket.dataset || [])
+        for (const pt of ds.point || [])
+          for (const v of pt.value || [])
+            total += v.intVal || 0;
+    return total;
+  }
+
   // ヘルスケア連携: URL ?steps=N で今日の歩数を同期
   _syncFromURL() {
     const params = new URLSearchParams(location.search);
@@ -947,6 +1022,10 @@ class MetalWalkingApp {
       if (n > this.state.todaySteps) {
         this.addSteps(n - this.state.todaySteps);
       }
+    });
+
+    document.getElementById('gfit-sync-btn').addEventListener('click', () => {
+      this._syncGoogleFit();
     });
 
     document.getElementById('step-counter-block').addEventListener('click', () => {

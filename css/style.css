@@ -565,21 +565,25 @@ html, body {
 #health-sync-wrap {
   display: flex;
   justify-content: center;
+  gap: 8px;
   margin: 6px 0 2px;
 }
 
-#health-sync-btn {
+#health-sync-btn, #gfit-sync-btn {
   font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
+  font-size: 6px;
   background: none;
-  color: #888;
+  color: #666;
   border: 1px solid #333;
-  padding: 6px 12px;
+  padding: 6px 10px;
   cursor: pointer;
   letter-spacing: 0.5px;
 }
 
+#gfit-sync-btn { color: #4a8; border-color: #264; }
+
 #health-sync-btn:active { color: var(--gold); border-color: var(--gold); }
+#gfit-sync-btn:active { color: #0f0; border-color: #0f0; }
 
 /* iOS permission modal */
 #ios-modal {
