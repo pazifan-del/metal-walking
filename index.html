@@ -26,39 +26,61 @@
   <!-- ══ MAIN SCREEN ══ -->
   <main id="screen-main" class="screen active">
 
-    <!-- Big step counter (tap 5× to open debug) -->
-    <div id="step-counter-block">
-      <div id="step-number">0</div>
-      <div id="step-label">TODAY'S STEPS</div>
+    <!-- レア度バー -->
+    <div id="fortune-rarity-bar">
+      <span id="fortune-stars"></span>
+      <span id="fortune-rarity-label"></span>
     </div>
 
-    <!-- Character image -->
+    <!-- キャラ画像 -->
     <div id="char-wrap">
       <div id="fire-overlay"></div>
       <img id="char-img" src="" alt="character" data-char-id="">
     </div>
 
-    <!-- Character name bar -->
+    <!-- キャラ名バー -->
     <div id="char-info">
-      <div id="char-name-display">タカサキ・サンダー</div>
-      <div id="char-title-display">雷神の右腕</div>
+      <div id="char-name-display">-</div>
+      <div id="char-title-display">-</div>
     </div>
 
-    <!-- Health sync -->
+    <!-- 運勢セクション -->
+    <div id="fortune-section">
+      <div id="fortune-level-wrap">
+        <span id="fortune-level">-</span>
+      </div>
+      <div id="fortune-ratings">
+        <div class="fortune-row">
+          <span class="fr-label">リフ運</span>
+          <span class="fr-stars" id="fr-rif"></span>
+        </div>
+        <div class="fortune-row">
+          <span class="fr-label">ヘドバン度</span>
+          <span class="fr-stars" id="fr-headbang"></span>
+        </div>
+        <div class="fortune-row">
+          <span class="fr-label">練習運</span>
+          <span class="fr-stars" id="fr-practice"></span>
+        </div>
+        <div class="fortune-row">
+          <span class="fr-label">ライブ運</span>
+          <span class="fr-stars" id="fr-live"></span>
+        </div>
+      </div>
+      <div id="fortune-quote"></div>
+    </div>
+
+    <!-- 歩数表示（サブ / 3回タップでデバッグ） -->
+    <div id="step-counter-block">
+      <span id="step-number">0</span>
+      <span id="step-label">STEPS</span>
+    </div>
+
+    <!-- アクションボタン -->
     <div id="health-sync-wrap">
       <button id="health-sync-btn">📲 歩数を入力</button>
-      <button id="auto-sync-info-btn">⚙ 自動同期の設定</button>
-    </div>
-
-    <!-- Milestone progress bar -->
-    <div id="milestone-section">
-      <div id="milestone-label">
-        <span id="milestone-next">NEXT: ...</span>
-        <span id="milestone-pct">0%</span>
-      </div>
-      <div id="milestone-bar">
-        <div id="milestone-fill" style="width:0%"></div>
-      </div>
+      <button id="auto-sync-info-btn">⚙ 同期設定</button>
+      <button id="reset-btn">🗑 RESET</button>
     </div>
 
   </main>
@@ -71,20 +93,20 @@
 
   <!-- ══ HISTORY SCREEN ══ -->
   <section id="screen-history" class="screen">
-    <div class="history-header">📊 WALK HISTORY — 歩行履歴</div>
+    <div class="history-header">📜 FORTUNE HISTORY — 運勢履歴</div>
     <div id="history-list"></div>
   </section>
 
   <!-- ══ BOTTOM NAV ══ -->
   <nav id="bottom-nav">
     <button class="nav-btn active" data-screen="main">
-      <span class="nav-icon">🎸</span>WALK
+      <span class="nav-icon">🎴</span>今日
     </button>
     <button class="nav-btn" data-screen="zukan">
       <span class="nav-icon">📖</span>図鑑
     </button>
     <button class="nav-btn" data-screen="history">
-      <span class="nav-icon">📊</span>履歴
+      <span class="nav-icon">📜</span>履歴
     </button>
   </nav>
 
@@ -137,6 +159,7 @@
   <button class="dbg-btn" id="dbg-1000">+1000歩</button>
   <button class="dbg-btn" id="dbg-5000">+5000歩</button>
   <button class="dbg-btn" id="dbg-10000">+10000歩</button>
+  <button class="dbg-btn" id="dbg-redraw">おみくじ再抽選</button>
   <button class="dbg-btn danger" id="dbg-reset">RESET</button>
 </div>
 
@@ -166,6 +189,6 @@
   </div>
 </div>
 
-<script src="js/app.js?v=9"></script>
+<script src="js/app.js?v=10"></script>
 </body>
 </html>
