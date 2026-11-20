@@ -1,7 +1,7 @@
 'use strict';
 
 // Google Fit連携: Google Cloud ConsoleでクライアントIDを取得後ここに貼る
-const GOOGLE_CLIENT_ID = '';
+const GOOGLE_CLIENT_ID = '965554977154-veesvf1b4mp77knuh6f8j5g6fg9eb5sm.apps.googleusercontent.com';
 
 // ═══════════════════════════════════════════════════════
 //  CHARACTER DATA
