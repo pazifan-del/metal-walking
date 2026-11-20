@@ -561,6 +561,26 @@ html, body {
 .dbg-btn:active { background: #003300; }
 .dbg-btn.danger { color: #f00; border-color: #f00; }
 
+/* ── HEALTH SYNC BUTTON ── */
+#health-sync-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 6px 0 2px;
+}
+
+#health-sync-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  background: none;
+  color: #888;
+  border: 1px solid #333;
+  padding: 6px 12px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+
+#health-sync-btn:active { color: var(--gold); border-color: var(--gold); }
+
 /* iOS permission modal */
 #ios-modal {
   position: fixed;

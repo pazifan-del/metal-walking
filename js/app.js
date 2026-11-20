@@ -939,6 +939,16 @@ class MetalWalkingApp {
       document.getElementById('ios-modal').classList.remove('show');
     });
 
+    document.getElementById('health-sync-btn').addEventListener('click', () => {
+      const input = prompt('ヘルスケアの今日の歩数を入力してください', this.state.todaySteps);
+      if (input === null) return;
+      const n = parseInt(input, 10);
+      if (isNaN(n) || n < 0) return;
+      if (n > this.state.todaySteps) {
+        this.addSteps(n - this.state.todaySteps);
+      }
+    });
+
     document.getElementById('step-counter-block').addEventListener('click', () => {
       this.debugTapCount++;
       clearTimeout(this.debugTapTimer);
