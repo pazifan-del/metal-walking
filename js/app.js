@@ -574,7 +574,7 @@ class MetalOmikujiApp {
     // ライブモード時は凶・アンプ爆発なし
     const LEVELS = this.state.liveMode ? [
       { label: '大吉',     weight: 15 },
-      { label: '三上か吉', weight: 2  },
+      { label: 'ミカミカ吉', weight: 2  },
       { label: 'サム吉',   weight: 2  },
       { label: '中吉',     weight: 30 },
       { label: '小吉',     weight: 28 },
@@ -582,7 +582,7 @@ class MetalOmikujiApp {
       { label: '末吉',     weight: 3  },
     ] : [
       { label: '大吉',     weight: 5  },
-      { label: '三上か吉', weight: 1  },
+      { label: 'ミカミカ吉', weight: 1  },
       { label: 'サム吉',   weight: 1  },
       { label: '中吉',     weight: 12 },
       { label: '小吉',     weight: 20 },
@@ -746,7 +746,7 @@ class MetalOmikujiApp {
   _fortuneLevelClass(level) {
     return {
       '大吉':     'fl-daikichi',
-      '三上か吉': 'fl-mikami',
+      'ミカミカ吉': 'fl-mikami',
       'サム吉':   'fl-samu',
       '中吉':     'fl-chukichi',
       '小吉':     'fl-shokichi',
