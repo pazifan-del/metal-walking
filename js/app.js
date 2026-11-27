@@ -571,26 +571,31 @@ class MetalOmikujiApp {
       if (r <= 0) { char = c; break; }
     }
 
-    // ライブモード時はアンプ爆発・音響トラブル・前座なし
+    // ライブモード時は凶・アンプ爆発なし
     const LEVELS = this.state.liveMode ? [
-      { label: 'ヘッドライナー', weight: 15 },
-      { label: '大トリ前',       weight: 30 },
-      { label: '中盤',           weight: 30 },
-      { label: '前半',           weight: 25 },
+      { label: '大吉',     weight: 15 },
+      { label: '三上か吉', weight: 2  },
+      { label: 'サム吉',   weight: 2  },
+      { label: '中吉',     weight: 30 },
+      { label: '小吉',     weight: 28 },
+      { label: '吉',       weight: 20 },
+      { label: '末吉',     weight: 3  },
     ] : [
-      { label: 'ヘッドライナー', weight: 10 },
-      { label: '大トリ前',       weight: 20 },
-      { label: '中盤',           weight: 25 },
-      { label: '前半',           weight: 20 },
-      { label: '前座',           weight: 13 },
-      { label: '音響トラブル',   weight: 8  },
-      { label: 'アンプ爆発',     weight: 4  },
+      { label: '大吉',     weight: 5  },
+      { label: '三上か吉', weight: 1  },
+      { label: 'サム吉',   weight: 1  },
+      { label: '中吉',     weight: 12 },
+      { label: '小吉',     weight: 20 },
+      { label: '吉',       weight: 30 },
+      { label: '末吉',     weight: 18 },
+      { label: '凶',       weight: 9  },
+      { label: 'アンプ爆発', weight: 4 },
     ];
     // ミカミカ・オズ・レミー・ジミは固定大吉
     const DAIKICHI_CHARS = ['mika', 'oz', 'lemmy', 'jimi'];
     let level;
     if (DAIKICHI_CHARS.includes(char.id)) {
-      level = LEVELS[0]; // 大吉
+      level = LEVELS.find(l => l.label === '大吉') || LEVELS[0]; // 大吉
     } else {
       const totalLW = LEVELS.reduce((s, l) => s + l.weight, 0);
       let lr = Math.random() * totalLW;
@@ -740,13 +745,15 @@ class MetalOmikujiApp {
 
   _fortuneLevelClass(level) {
     return {
-      'ヘッドライナー': 'fl-daikichi',
-      '大トリ前':       'fl-chukichi',
-      '中盤':           'fl-shokichi',
-      '前半':           'fl-kichi',
-      '前座':           'fl-suekichi',
-      '音響トラブル':   'fl-kyo',
-      'アンプ爆発':     'fl-daikyo',
+      '大吉':     'fl-daikichi',
+      '三上か吉': 'fl-mikami',
+      'サム吉':   'fl-samu',
+      '中吉':     'fl-chukichi',
+      '小吉':     'fl-shokichi',
+      '吉':       'fl-kichi',
+      '末吉':     'fl-suekichi',
+      '凶':       'fl-kyo',
+      'アンプ爆発': 'fl-daikyo',
     }[level] || '';
   }
 

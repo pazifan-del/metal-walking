@@ -226,13 +226,30 @@ html, body {
   letter-spacing: 6px;
 }
 
-.fl-daikichi { color: var(--gold);       text-shadow: 0 0 12px var(--gold); animation: pulse 1s infinite alternate; }
+.fl-daikichi { color: var(--gold); text-shadow: 0 0 16px var(--gold), 0 0 32px #f39c12; animation: gold-pulse 1s infinite alternate; }
+.fl-mikami   { animation: mikami-flash 0.4s infinite; letter-spacing: 8px; }
+.fl-samu     { color: #fff; text-shadow: 0 0 20px var(--gold), 0 0 40px #fff, 0 0 60px var(--gold); animation: samu-pulse 0.6s infinite alternate; letter-spacing: 8px; }
 .fl-chukichi { color: #e0c060; }
 .fl-shokichi { color: var(--silver); }
 .fl-kichi    { color: var(--text); }
 .fl-suekichi { color: #666; }
 .fl-kyo      { color: var(--red-bright); text-shadow: 0 0 8px var(--red); }
 .fl-daikyo   { color: #ff2200; text-shadow: 0 0 16px #ff2200, 0 0 32px #ff0000; animation: pulse 0.4s infinite alternate; letter-spacing: 6px; }
+
+@keyframes gold-pulse {
+  from { text-shadow: 0 0 12px var(--gold), 0 0 24px #f39c12; }
+  to   { text-shadow: 0 0 24px var(--gold), 0 0 48px var(--gold), 0 0 72px #f39c12; }
+}
+@keyframes mikami-flash {
+  0%   { color: var(--gold);   text-shadow: 0 0 20px var(--gold), 0 0 40px #f39c12; }
+  33%  { color: #e74c3c;       text-shadow: 0 0 20px #e74c3c, 0 0 40px var(--red); }
+  66%  { color: #c084fc;       text-shadow: 0 0 20px #9b59b6, 0 0 40px #6c3483; }
+  100% { color: var(--cyan);   text-shadow: 0 0 20px var(--cyan), 0 0 40px #148f77; }
+}
+@keyframes samu-pulse {
+  from { text-shadow: 0 0 20px var(--gold), 0 0 40px #fff, 0 0 60px var(--gold); }
+  to   { text-shadow: 0 0 40px #fff, 0 0 80px var(--gold), 0 0 120px #fff; }
+}
 
 #fortune-ratings {
   display: grid;
@@ -449,13 +466,17 @@ html, body {
 }
 
 #event-desc {
-  font-size: 8px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: clamp(12px, 3.5vw, 15px);
   color: var(--gold);
   text-align: center;
-  line-height: 2;
+  line-height: 1.8;
   padding: 0 20px;
   margin-bottom: 20px;
   white-space: pre-line;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 #event-char-preview {
