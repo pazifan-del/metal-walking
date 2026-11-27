@@ -542,9 +542,22 @@ class MetalOmikujiApp {
     this._bindUI();
     this._render();
 
-    if (this.isNewDraw) {
-      this.isNewDraw = false;
-      setTimeout(() => this._showFortuneReveal(), 600);
+    // スプラッシュ画面（初回のみ表示、タップで閉じる）
+    const splash = document.getElementById('splash-screen');
+    const dismissSplash = () => {
+      splash.classList.add('hidden');
+      if (this.isNewDraw) {
+        this.isNewDraw = false;
+        setTimeout(() => this._showFortuneReveal(), 400);
+      }
+    };
+    splash.addEventListener('click', dismissSplash);
+    splash.addEventListener('touchend', dismissSplash);
+    // 通常起動時は2秒後に自動消去
+    if (!this.isNewDraw) {
+      setTimeout(dismissSplash, 2000);
+    } else {
+      this.isNewDraw = true;
     }
   }
 
@@ -558,19 +571,20 @@ class MetalOmikujiApp {
       if (r <= 0) { char = c; break; }
     }
 
-    // ライブモード時は凶・末吉なし
+    // ライブモード時はアンプ爆発・音響トラブル・前座なし
     const LEVELS = this.state.liveMode ? [
-      { label: '大吉', weight: 15 },
-      { label: '中吉', weight: 30 },
-      { label: '小吉', weight: 30 },
-      { label: '吉',   weight: 25 },
+      { label: 'ヘッドライナー', weight: 15 },
+      { label: '大トリ前',       weight: 30 },
+      { label: '中盤',           weight: 30 },
+      { label: '前半',           weight: 25 },
     ] : [
-      { label: '大吉', weight: 10 },
-      { label: '中吉', weight: 20 },
-      { label: '小吉', weight: 25 },
-      { label: '吉',   weight: 20 },
-      { label: '末吉', weight: 15 },
-      { label: '凶',   weight: 10 },
+      { label: 'ヘッドライナー', weight: 10 },
+      { label: '大トリ前',       weight: 20 },
+      { label: '中盤',           weight: 25 },
+      { label: '前半',           weight: 20 },
+      { label: '前座',           weight: 13 },
+      { label: '音響トラブル',   weight: 8  },
+      { label: 'アンプ爆発',     weight: 4  },
     ];
     // ミカミカ・オズ・レミー・ジミは固定大吉
     const DAIKICHI_CHARS = ['mika', 'oz', 'lemmy', 'jimi'];
@@ -669,8 +683,8 @@ class MetalOmikujiApp {
     // レア度バー
     document.getElementById('fortune-stars').textContent      = '★'.repeat(char.stars) + '☆'.repeat(5 - char.stars);
     document.getElementById('fortune-stars').className        = `rarity-${char.stars}`;
-    document.getElementById('fortune-rarity-label').textContent = this._rarityLabel(char.stars);
-    document.getElementById('fortune-rarity-label').className   = `rarity-${char.stars}`;
+    document.getElementById('fortune-rarity-label').textContent = '';
+    document.getElementById('fortune-rarity-label').className   = '';
 
     // キャラ画像（タップで stand/action 切り替え）
     const img = document.getElementById('char-img');
@@ -725,8 +739,15 @@ class MetalOmikujiApp {
   _rarityLabel(s)   { return { 5:'SSR', 4:'SR', 3:'R', 2:'UC', 1:'C' }[s] || ''; }
 
   _fortuneLevelClass(level) {
-    return { '大吉':'fl-daikichi', '中吉':'fl-chukichi', '小吉':'fl-shokichi',
-             '吉':'fl-kichi', '末吉':'fl-suekichi', '凶':'fl-kyo' }[level] || '';
+    return {
+      'ヘッドライナー': 'fl-daikichi',
+      '大トリ前':       'fl-chukichi',
+      '中盤':           'fl-shokichi',
+      '前半':           'fl-kichi',
+      '前座':           'fl-suekichi',
+      '音響トラブル':   'fl-kyo',
+      'アンプ爆発':     'fl-daikyo',
+    }[level] || '';
   }
 
   // ── 運勢リビール ──────────────────────────────────────
@@ -746,7 +767,7 @@ class MetalOmikujiApp {
     const prefix = isRetry ? '😭 泣きの1回！\n' : '';
     this._showEventOverlay({
       title: `${s}  ${fortune.level}  ${s}`,
-      desc:  `${prefix}${char.name}\n「${char.title}」\n${this._rarityLabel(char.stars)}\n\n${char.quotes[fortune.quoteIdx || 0]}`,
+      desc:  `${prefix}${char.name}\n「${char.title}」\n\n${char.quotes[fortune.quoteIdx || 0]}`,
     }, char);
   }
 
