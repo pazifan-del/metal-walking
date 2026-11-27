@@ -470,7 +470,13 @@ class MetalOmikujiApp {
       if (r <= 0) { char = c; break; }
     }
 
-    const LEVELS = [
+    // ライブモード時は凶・末吉なし
+    const LEVELS = this.state.liveMode ? [
+      { label: '大吉', weight: 15 },
+      { label: '中吉', weight: 30 },
+      { label: '小吉', weight: 30 },
+      { label: '吉',   weight: 25 },
+    ] : [
       { label: '大吉', weight: 10 },
       { label: '中吉', weight: 20 },
       { label: '小吉', weight: 25 },
@@ -519,6 +525,8 @@ class MetalOmikujiApp {
       collection: [],
       todayDate: this._today(),
       history: [],
+      liveMode: false,
+      useActionImg: false,
     };
   }
 
@@ -576,10 +584,11 @@ class MetalOmikujiApp {
     document.getElementById('fortune-rarity-label').textContent = this._rarityLabel(char.stars);
     document.getElementById('fortune-rarity-label').className   = `rarity-${char.stars}`;
 
-    // キャラ画像
+    // キャラ画像（タップで stand/action 切り替え）
     const img = document.getElementById('char-img');
-    img.src = char.stand;
+    img.src = this.state.useActionImg ? char.action : char.stand;
     img.dataset.charId = char.id;
+    img.title = 'タップで切り替え';
 
     // キャラ名
     document.getElementById('char-name-display').textContent  = char.name;
@@ -603,6 +612,25 @@ class MetalOmikujiApp {
     // 泣きの1回ボタン（テスト中: 常に表示）
     document.getElementById('nakino-btn').style.display  = '';
     document.getElementById('nakino-used').style.display = 'none';
+
+    // ライブモードUI
+    this._updateLiveModeUI();
+  }
+
+  _updateLiveModeUI() {
+    const btn  = document.getElementById('live-mode-btn');
+    const wrap = document.getElementById('live-mode-wrap');
+    if (this.state.liveMode) {
+      btn.textContent = '🎸 LIVE MODE ON';
+      btn.classList.add('live-on');
+      wrap.classList.add('live-on');
+      document.getElementById('app').classList.add('live-mode');
+    } else {
+      btn.textContent = '🎸 今日ライブあり';
+      btn.classList.remove('live-on');
+      wrap.classList.remove('live-on');
+      document.getElementById('app').classList.remove('live-mode');
+    }
   }
 
   _starsStr(n)      { return '★'.repeat(n) + '☆'.repeat(5 - n); }
@@ -788,6 +816,40 @@ class MetalOmikujiApp {
         this._saveState();
         this._updateMainUI();
         this._showFortuneReveal(true);
+      }
+    });
+
+    // キャラ画像タップ → stand/action 切り替え
+    document.getElementById('char-img').addEventListener('click', () => {
+      const fortune = this.state.dailyFortune;
+      if (!fortune) return;
+      const char = ALL_CHARS.find(c => c.id === fortune.charId);
+      if (!char || char.stand === char.action) return;
+      this.state.useActionImg = !this.state.useActionImg;
+      this._saveState();
+      const img = document.getElementById('char-img');
+      img.src = this.state.useActionImg ? char.action : char.stand;
+      img.classList.add('img-switch');
+      setTimeout(() => img.classList.remove('img-switch'), 300);
+    });
+
+    // ライブモードボタン
+    document.getElementById('live-mode-btn').addEventListener('click', () => {
+      this.state.liveMode = !this.state.liveMode;
+      if (this.state.liveMode) {
+        // ライブモードON → actionイメージに自動切り替え
+        this.state.useActionImg = true;
+      }
+      this._saveState();
+      this._updateLiveModeUI();
+      // 画像更新
+      const fortune = this.state.dailyFortune;
+      if (fortune) {
+        const char = ALL_CHARS.find(c => c.id === fortune.charId);
+        if (char) {
+          const img = document.getElementById('char-img');
+          img.src = this.state.useActionImg ? char.action : char.stand;
+        }
       }
     });
 

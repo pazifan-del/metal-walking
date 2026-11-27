@@ -236,6 +236,65 @@ html, body {
   -webkit-box-orient: vertical;
 }
 
+/* ── ライブモード ── */
+#live-mode-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 4px 8px 2px;
+  flex-shrink: 0;
+}
+
+#live-mode-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  background: none;
+  border: 2px solid #333;
+  color: #555;
+  padding: 7px 14px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+
+#live-mode-btn.live-on {
+  border-color: var(--gold);
+  color: var(--gold);
+  text-shadow: 0 0 10px var(--gold);
+  box-shadow: 0 0 14px rgba(241,196,15,0.4);
+  animation: live-pulse 1.5s infinite alternate;
+}
+
+@keyframes live-pulse {
+  from { box-shadow: 0 0 8px rgba(241,196,15,0.3); }
+  to   { box-shadow: 0 0 20px rgba(241,196,15,0.7); }
+}
+
+/* ライブモード時のヘッダー色変化 */
+#app.live-mode #header {
+  border-bottom-color: var(--gold);
+  box-shadow: 0 2px 12px rgba(241,196,15,0.4);
+}
+
+#app.live-mode #app-title {
+  color: var(--gold);
+  text-shadow: 0 0 8px var(--gold);
+}
+
+/* キャラ画像切り替えアニメ */
+#char-img {
+  cursor: pointer;
+}
+
+#char-img.img-switch {
+  animation: img-flash 0.3s ease-out;
+}
+
+@keyframes img-flash {
+  0%   { filter: brightness(2); }
+  100% { filter: brightness(1); }
+}
+
 /* ── 泣きの1回 ── */
 #nakino-wrap {
   width: 100%;
