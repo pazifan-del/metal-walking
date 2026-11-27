@@ -898,13 +898,11 @@ class MetalOmikujiApp {
 
     // 泣きの1回
     document.getElementById('nakino-btn').addEventListener('click', () => {
-      if (confirm('もう一回引く？（テスト中: 何回でも可）')) {
-        this.state.dailyFortune = this._drawFortune(false);
-        this._addToCollection(this.state.dailyFortune.charId);
-        this._saveState();
-        this._updateMainUI();
-        this._showFortuneReveal(true);
-      }
+      this.state.dailyFortune = this._drawFortune(false);
+      this._addToCollection(this.state.dailyFortune.charId);
+      this._saveState();
+      this._updateMainUI();
+      this._showFortuneReveal(true);
     });
 
     // キャラ画像タップ → stand/action 切り替え
