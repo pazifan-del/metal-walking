@@ -1,10 +1,10 @@
-const CACHE = 'metal-walking-v19';
+const CACHE = 'metal-walking-v20';
 const ASSETS = [
   './',
   './index.html',
   './css/style.css',
   './js/app.js',
-  './js/app.js?v=19',
+  './js/app.js?v=20',
   './manifest.json',
   './assets/icon-192.png',
   './assets/icon-512.png',
